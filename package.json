@@ -1,0 +1,20 @@
+{
+  "name": "watchly-express-backend",
+  "version": "1.0.0",
+  "description": "Watchly Application backend using ExpressJs and MongoDB",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "MongoDB",
+    "ExpressJS"
+  ],
+  "author": "Mostafa Mahmoud",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1"
+  }
+}
