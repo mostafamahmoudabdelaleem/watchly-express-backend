@@ -6,7 +6,7 @@ const logger = require("../logger");
 
 const MOVIES_FILE = path.join(__dirname, "../data/movies.json");
 
-let moviesData = require(MOVIES_FILE).data;
+let moviesData = require(MOVIES_FILE);
 
 router.get("/", (req, res) => {
   res.json(moviesData);
