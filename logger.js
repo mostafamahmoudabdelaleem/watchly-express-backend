@@ -19,6 +19,11 @@ class Logger {
       `[v${version}@${time}]: url:<${req.originalUrl}> method:<${req.method}> ip:<${req.ip}>`
     );
   }
+
+  clearLogFile(callback) {
+    let template = "Watchly Express Backend Log File\n============================================================";
+    fs.writeFile(LOG_FILE, template, callback)
+  }
 }
 
 module.exports = new Logger();

@@ -35,5 +35,11 @@ app.get("*", (req, res) => {
 
 //Serve App
 app.listen(port, () => {
+  logger.clearLogFile((err) => {
+    if (err) {
+      console.log('Can\'t find log file or error while opening it');
+    }
+    console.log('Log file cleared successfull')
+  })
   logger.log(`Started at Port ${port}`);
 });

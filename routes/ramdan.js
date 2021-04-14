@@ -25,7 +25,6 @@ router.post("/", (req, res) => {
   let toAppend = [];
   data.forEach((item, i) => {
     let _index = LIST_DATA.findIndex(val => val['id'] === item['id'])
-    logger.log(`_index = ${_index}`);
     if (_index === -1) {
       toAppend.push(item)
     }
@@ -34,7 +33,7 @@ router.post("/", (req, res) => {
 
   if (toAppend.length > 0) {
     let newList = toAppend.concat(LIST_DATA)
-    logger.log(`List size = ${LIST_DATA.length}`);
+    logger.log(`List old size = ${LIST_DATA.length}`);
 
     fs.writeFile(RAMADAN_FILE, JSON.stringify(newList), (err) => {
       if (err) {

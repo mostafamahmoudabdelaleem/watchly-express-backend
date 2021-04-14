@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const fs = require("fs");
 const path = require("path");
+const logger = require("../logger");
 
 const LOG_FILE = path.join(__dirname, "../data/log.txt");
 
@@ -25,8 +26,7 @@ router.get("/clear", (req, res) => {
     if (_token !== '123123123') {
         res.send('You are not authorized to see this page')
     } else {
-        let template = "Watchly Express Backend Log File\n============================================================";
-        fs.writeFile(LOG_FILE, template, (err, data) => {
+        logger.clearLogFile((err) => {
             if (err) {
                 res.send('Can\'t find log file or error while opening it');
             }
