@@ -15,6 +15,7 @@ router.get("/", (req, res) => {
 router.post("/", (req, res) => {
   let data = req.body;
   if (data === null || data.length < 1) {
+    logger.log("Update request with empty body");
     res.json({
       err_msg: 'Empty Body',
       err: true,
@@ -23,14 +24,17 @@ router.post("/", (req, res) => {
 
   let toAppend = [];
   data.forEach((item, i) => {
-    let _index = LIST_DATA.findIndex((val) => val['name'] === item['name'])
-    if (_index != -1) {
+    let _index = LIST_DATA.findIndex(val => val['id'] === item['id'])
+    logger.log(`_index = ${_index}`);
+    if (_index === -1) {
       toAppend.push(item)
     }
   });
+  logger.log(`${toAppend.length} new item to add`);
 
-  if (toAppend.length > 1) {
+  if (toAppend.length > 0) {
     let newList = toAppend.concat(LIST_DATA)
+    logger.log(`List size = ${LIST_DATA.length}`);
 
     fs.writeFile(RAMADAN_FILE, JSON.stringify(newList), (err) => {
       if (err) {
@@ -42,7 +46,8 @@ router.post("/", (req, res) => {
         });
       } else {
         LIST_DATA = newList;
-        logger.log(`Ramadan list updated successfully at ${new Date().toUTCString()}`);
+        logger.log(`List new size = ${LIST_DATA.length}`);
+        logger.log(`Ramadan list updated successfully`);
         res.json({
           err_msg: null,
           err: false,
@@ -54,6 +59,19 @@ router.post("/", (req, res) => {
       err_msg: 'No new item to add',
       err: true,
     });
+  }
+});
+
+router.get("/status", (req, res) => {
+  let _token = req.query.token
+  if (_token !== '123123123') {
+      res.json({
+        err: 'You are not authorized to see this page'
+      })
+  } else {
+      res.json({
+        status: `Current list size = ${LIST_DATA.length}`
+      })
   }
 });
 
