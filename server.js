@@ -6,6 +6,7 @@ const logger = require("./logger");
 const moviesRouter = require("./routes/movies");
 const seriesRouter = require("./routes/series");
 const ramadanRouter = require("./routes/ramdan");
+const logRouter = require('./routes/log');
 
 //App configs
 const app = express();
@@ -25,6 +26,7 @@ app.use((req, res, next) => {
 app.use("/api/movies/", moviesRouter);
 app.use("/api/series/", seriesRouter);
 app.use("/api/ramdan/", ramadanRouter);
+app.use("/log/", logRouter);
 
 //Redirect default entry to watchly.tk
 app.get("*", (req, res) => {
@@ -34,5 +36,4 @@ app.get("*", (req, res) => {
 //Serve App
 app.listen(port, () => {
   logger.log(`Started at Port ${port}`);
-  logger.log(`Live at http://localhost:${port}/api`);
 });
