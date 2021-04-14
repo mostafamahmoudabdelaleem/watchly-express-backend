@@ -1,4 +1,2 @@
 Watchly Express Backend Log File
-============================================================[v1.0.1@Wed, 14 Apr 2021 21:45:50 GMT]: Started at Port 5000
-[v1.0.1@Wed, 14 Apr 2021 21:47:42 GMT]: Started at Port 5000
-[v1.0.1@Wed, 14 Apr 2021 21:49:08 GMT]: Started at Port 5000
+============================================================

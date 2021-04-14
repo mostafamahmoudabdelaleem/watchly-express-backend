@@ -7,7 +7,7 @@ const LOG_FILE = path.join(__dirname, "./data/log.txt");
 class Logger {
   log(msg) {
     let time = new Date().toUTCString();
-    let log_msg = `[v${version}@${time}]: ${msg}\n`;
+    let log_msg = `\n[v${version}@${time}]: ${msg}`;
     fs.appendFile(LOG_FILE, log_msg, (err) => {
       if (err) console.log(err)
     })
