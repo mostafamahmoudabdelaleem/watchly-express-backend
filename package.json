@@ -1,6 +1,6 @@
 {
   "name": "watchly-express-backend",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Watchly Application backend using ExpressJs and MongoDB",
   "main": "server.js",
   "scripts": {
