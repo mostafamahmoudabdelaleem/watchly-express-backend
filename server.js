@@ -25,7 +25,7 @@ app.use((req, res, next) => {
 //App Routes
 app.use("/api/movies/", moviesRouter);
 app.use("/api/series/", seriesRouter);
-app.use("/api/ramdan/", ramadanRouter);
+app.use("/api/ramadan/", ramadanRouter);
 app.use("/log/", logRouter);
 
 //Redirect default entry to watchly.tk
