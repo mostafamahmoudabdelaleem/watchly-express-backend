@@ -23,13 +23,20 @@ router.post("/", (req, res) => {
   }
 
   let toAppend = [];
+  let updateCount = 0;
   data.forEach((item, i) => {
     let _index = LIST_DATA.findIndex(val => val['id'] === item['id'])
     if (_index === -1) {
       toAppend.push(item)
+    } else {
+      if (Object.keys(LIST_DATA[_index]['sources_links']).length < Object.keys(item['sources_links']).length) {
+        LIST_DATA[_index] = item;
+        updateCount++
+      }
     }
   });
-  logger.log(`${toAppend.length} new item to add`);
+  
+  if (updateCount > 0) { logger.log(`Updated items count => ${updateCount}`); }
 
   if (toAppend.length > 0) {
     let newList = toAppend.concat(LIST_DATA)
@@ -64,13 +71,13 @@ router.post("/", (req, res) => {
 router.get("/status", (req, res) => {
   let _token = req.query.token
   if (_token !== '123123123') {
-      res.json({
-        err: 'You are not authorized to see this page'
-      })
+    res.json({
+      err: 'You are not authorized to see this page'
+    })
   } else {
-      res.json({
-        status: `Current list size = ${LIST_DATA.length}`
-      })
+    res.json({
+      status: `Current list size = ${LIST_DATA.length}`
+    })
   }
 });
 
