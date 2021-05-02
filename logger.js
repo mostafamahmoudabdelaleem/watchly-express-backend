@@ -7,7 +7,7 @@ const LOG_FILE = path.join(__dirname, "./data/log.txt");
 class Logger {
   log(msg) {
     let time = new Date().toUTCString();
-    let log_msg = `\n[v${version}@${time}]: ${msg}`;
+    let log_msg = `[v${version}@${time}]: ${msg}\n`;
     fs.appendFile(LOG_FILE, log_msg, (err) => {
       if (err) console.log(err)
     })
@@ -21,8 +21,7 @@ class Logger {
   }
 
   clearLogFile(callback) {
-    let template = "Watchly Express Backend Log File\n============================================================";
-    fs.writeFile(LOG_FILE, template, callback)
+    fs.writeFile(LOG_FILE, '', callback)
   }
 }
 

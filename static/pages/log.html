@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/imgs/log-logo.png" type="image/png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Mono">
+    <title>Log Page</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #343434;
+            color: snow;
+            padding: 0;
+            margin: 0;
+            height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f100;
+            border-radius: 8px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 25px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        #code {
+            padding: 10px;
+            border-radius: 4px;
+            border-width: 0;
+            flex-grow: 1;
+        }
+
+        .button {
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid snow;
+            background-color: transparent;
+            color: snow;
+            cursor: pointer;
+            width: 80px;
+        }
+
+        .button:hover {
+            background-color: snow;
+            color: #343434;
+        }
+
+        .inline-form {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            margin: 16px;
+            width: 70%;
+        }
+
+        .hint {
+            margin: 4px 0 0 4px;
+            font-size: small;
+            color: red;
+        }
+
+        .log-view {
+            background-color: snow;
+            flex-grow: 1;
+            margin: 16px;
+            color: #343434;
+            width: 70%;
+            border-radius: 4px;
+            overflow-y: scroll;
+            padding: 8px;
+            font-family: Roboto Mono, monospace;
+            font-size: 8pt;
+        }
+
+        .d-none {
+            display: none;
+        }
+
+        .ml-8 {
+            margin-left: 8px;
+        }
+
+        .action-container {
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            width: 72%;
+            margin: 16px;
+        }
+
+        .w-50 {
+            width: 50%;
+        }
+
+        .input {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        @media (max-width: 599.99px) {
+            .log-view {
+                width: 90%;
+            }
+
+            .inline-form {
+                width: 90%;
+            }
+
+            .action-container {
+                width: 92%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="form" class="inline-form">
+        <div class="input">
+            <input id="code" type="text" placeholder="Enter The Security Code" required />
+            <p id="hint" class="hint" hidden>Please enter valid security code</p>
+        </div>
+        <button class="button ml-8" onclick="connect()">Connect</button>
+    </div>
+    <pre id="view" class="log-view" hidden></pre>
+    <div id="action-container" class="d-none">
+        <button class="button w-50" onclick="disconnect()">Disconnect</button>
+        <button class="button w-50 ml-8" onclick="clearLog()">Clear Log</button>
+    </div>
+    <script>
+        const updateInterval = 10 * 1000;
+        const Public_URL = window.location.href.split('/log')[0];
+        let intervalID = null;
+        let actionContainer = document.getElementById('action-container');
+        let code = document.getElementById('code');
+        let hint = document.getElementById('hint');
+        let view = document.getElementById('view');
+
+
+        function connect() {
+            let codeVal = code.value;
+            if (codeVal === '') {
+                hint.hidden = false
+            } else {
+                view.hidden = false;
+                hint.hidden = true;
+                document.getElementById('form').className = "inline-form d-none";
+                actionContainer.className = "action-container";
+                getLog()
+                intervalID = setInterval(() => {
+                    getLog()
+                }, updateInterval)
+            }
+        }
+
+        function getLog() {
+            let codeVal = code.value;
+            console.log('Getting new log data')
+
+            fetch(`${Public_URL}/api/log?token=${codeVal}`)
+                .then(resp => {
+                    if (resp.status === 403) { clearInterval(intervalID) }
+                    resp.text()
+                        .then(_data => {
+                            view.innerHTML = _data;
+                            view.scrollTop = view.scrollHeight;
+                        })
+                })
+                .catch(err => console.log(err))
+        }
+
+        function clearLog() {
+            let codeVal = code.value;
+
+            fetch(`${Public_URL}/api/log/clear?token=${codeVal}`)
+                .then(resp => {
+                    resp.text()
+                        .then(_data => {
+                            view.innerHTML = _data;
+                        })
+                })
+                .catch(err => console.log(err))
+        }
+
+        function disconnect() {
+            view.hidden = true;
+            hint.hidden = true;
+            document.getElementById('form').className = "inline-form";
+            actionContainer.className = "d-none";
+            clearInterval(intervalID)
+        }
+
+    </script>
+</body>
+
+</html>

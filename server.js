@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const logger = require("./logger");
@@ -26,7 +27,12 @@ app.use((req, res, next) => {
 app.use("/api/movies/", moviesRouter);
 app.use("/api/series/", seriesRouter);
 app.use("/api/ramadan/", ramadanRouter);
-app.use("/log/", logRouter);
+app.use("/api/log/", logRouter);
+
+app.use('/imgs', express.static(path.join(__dirname, 'static/imgs')));
+app.get("/log", (req, res) => {
+  res.sendFile(path.join(__dirname, './static/pages/log.html'));
+})
 
 //Redirect default entry to watchly.tk
 app.get("*", (req, res) => {
